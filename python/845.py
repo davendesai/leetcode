@@ -5,40 +5,29 @@ class Solution:
         if n < 3: return 0
 
         mountains = []
-
-        def climb(i):
-            while i < n-1 and arr[i] < arr[i+1]:
-                i += 1
-            return i
-
-        def descend(i):
-            while i < n-1 and arr[i] > arr[i+1]:
-                i += 1
-            return i
-            
         ans = 0
 
-        # mountains have to start at a low
-        # i.e. be increasing
-        j = 0
+        i = 1
+        while i < n-1:
+            l, r = i-1, i+1
 
-        while j < n:
-            # advance till base
-            while j < n-1 and arr[j] >= arr[j+1]:
-                j += 1
+            # found summit
+            if arr[l] < arr[i] and arr[r] < arr[i]:
 
-            summit = climb(j)
-            if summit == n-1:
-                break
-            bottom = descend(summit)
+                # gradually expand borders
+                while l > 0 and arr[l] > arr[l-1]:
+                    l -= 1
 
-            if summit-j+1 > 1 and bottom-summit+1 > 1:
-                mountain = arr[j:bottom+1]
-                ans = max(ans, len(mountain))
-                mountains.append(mountain)
+                while r < n-1 and arr[r] > arr[r+1]:
+                    r += 1
 
-            j = bottom
+                mountains.append(arr[l:r+1])
+                ans = max(ans, r-l+1)
+                i = r
+
+            else:
+                i += 1
 
         print(mountains)
-        return ans
+        return ans    
 
